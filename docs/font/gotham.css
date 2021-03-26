@@ -1,0 +1,20 @@
+
+/* Regular 400 */
+@font-face {
+    font-family: Gotham;
+    src: url("Gotham/Gotham-Medium.ttf");
+}
+  
+/* Bold 700 */
+@font-face {
+    font-family: Gotham;
+    font-weight: 700;
+    src: url("Gotham/Gotham-Ultra.ttf");
+}
+  
+/* Light 300 */
+@font-face {
+    font-family: Gotham;
+    font-weight: 300;
+    src: url("Gotham/Gotham-Thin.ttf");
+}

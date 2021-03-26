@@ -1,0 +1,55 @@
+
+/* Regular 400 */
+@font-face {
+  font-family: Metric;
+  src: url("Metric/Metric-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Metric;
+  font-style: italic;
+  src: url("Lato/Metric-RegularItalic.otf") format("opentype");
+}
+
+/* Bold 700 */
+@font-face {
+  font-family: Metric;
+  font-weight: bold;
+  src: url("Metric/Metric-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Metric;
+  font-weight: bold;
+  font-style: italic;
+  src: url("Metric/Metric-MediumItalic.otf") format("opentype");
+}
+
+/* Light 300 */
+@font-face {
+  font-family: Metric;
+  font-weight:300;
+  src: url("Metric/Metric-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Metric;
+  font-weight: 300;
+  font-style: italic;
+  src: url("Metric/Metric-LightItalic.otf") format("opentype");
+}
+
+
+/* Thin 100 */
+@font-face {
+  font-family: Metric;
+  font-weight: 100;
+  src: url("Metric/Metric-Thin.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Metric;
+  font-weight: 100;
+  font-style: italic;
+  src: url("Metric/Metric-ThinItalic.otf") format("opentype");
+}

@@ -1,12 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
 
-<html>
-    <head>
-        <title>vfx.coop</title>
-    </head>
-</html>
-<body>
-    <h1>www.vfx.coop</h1>
+<head>
+    <title>vfx.coop</title>
+    <meta name="description" content="the.vfx.cooperative">
+    <link href="css/bootstrap-5.0.0-beta2-dist/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/bootstrap-5.0.0-beta2-dist/bootstrap.bundle.min.js"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+</head>
+
+<body class="bg-dark text-light">
+    <div class="d-flex flex-column align-items-center" style="min-height: 100vh">
+        <div class="p-2 flex-grow-1"></div>
+        <div class="display-1">vfx.coop</div>
+        <div class="text-uppercase">
+            85 Great Portland Street ● First Floor ● London ● W1W 7LT
+        </div>
+        <div class="p-2 flex-grow-1"><button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                data-bs-target="#contactus">Contact Us</button></div>
+    </div>
+
+    <div class="modal fade" id="contactus" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content  bg-dark">
+                <form class="needs-validation" method="POST" novalidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Contact Us</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="textarea" class="form-label">Tell us a story</label>
+                            <textarea class="form-control" id="textarea" rows="3" required></textarea>
+                            <div class="invalid-feedback">
+                                We need a story
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">How can we communicate</label>
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                            <div class="invalid-feedback">
+                                We'd like to communicate
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="g-recaptcha" data-sitekey="6LfhCZAaAAAAAOeNjSPPd-Qxl6_4F7wFWbqL807X"></div>
+                        <button type="submit" class="btn btn-secondary">I am not a robot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var form = document.querySelector('.needs-validation')
+        form.addEventListener('submit',(event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    </script>
 </body>
 </html>
-
-
