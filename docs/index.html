@@ -92,7 +92,11 @@
                     method: "POST",
                     body: JSON.stringify(data),
                 }).then(function (response) {
-                    document.querySelector(".toast-body").innerText = "" + response;
+                    if(response.status == 200) {
+                        document.querySelector(".toast-body").innerText = "" + response["content"];
+                    } else {
+                        document.querySelector(".toast-body").innerText = "" + response.statusText;
+                    }
                     modal.hide();
                     toast.show();
                     form.reset();

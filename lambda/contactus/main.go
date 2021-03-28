@@ -26,17 +26,24 @@ type Response struct {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// GLOBALS
+
+var (
+	ResponseHeaders = map[string]string{
+		"Access-Control-Allow-Origin":  "https://www.vfx.coop",
+		"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+		"Access-Control-Allow-Headers": "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization",
+	}
+)
+
+///////////////////////////////////////////////////////////////////////////////
 // HANDLER
 
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// COORS
 	if request.HTTPMethod == http.MethodOptions {
 		return events.APIGatewayProxyResponse{
-			Headers: map[string]string{
-				"Access-Control-Allow-Origin":  "https://www.vfx.coop",
-				"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-				"Access-Control-Allow-Headers": "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization",
-			},
+			Headers:    ResponseHeaders,
 			StatusCode: http.StatusOK,
 		}, nil
 	}
@@ -94,6 +101,7 @@ func SendResponse(code int, value interface{}) (events.APIGatewayProxyResponse, 
 	json, err := json.Marshal(response)
 	return events.APIGatewayProxyResponse{
 		Body:       string(json) + "\n",
+		Headers:    ResponseHeaders,
 		StatusCode: code,
 	}, err
 }
