@@ -91,11 +91,13 @@
                     },
                     method: "POST",
                     body: JSON.stringify(data),
-                }).then(function (response) {
+                })
+                .then(response => response.json())
+                .then(response => {
                     if(response.status == 200) {
                         document.querySelector(".toast-body").innerText = "" + response["content"];
                     } else {
-                        document.querySelector(".toast-body").innerText = "" + response.statusText;
+                        document.querySelector(".toast-body").innerText = "Error: " + response["content"];
                     }
                     modal.hide();
                     toast.show();
