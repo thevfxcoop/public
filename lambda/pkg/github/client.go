@@ -13,12 +13,14 @@ import (
 
 type Client struct {
 	*github.Client
+
+	owner string
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // LIFECYCLE
 
-func NewClient(ctx context.Context, token string) *Client {
+func NewClient(ctx context.Context, token, owner string) *Client {
 	this := new(Client)
 	tc := oauth2.NewClient(ctx, oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
@@ -27,7 +29,10 @@ func NewClient(ctx context.Context, token string) *Client {
 		return nil
 	} else {
 		this.Client = github
+		this.owner = owner
 	}
+
+	// Return success
 	return this
 }
 
@@ -35,6 +40,6 @@ func NewClient(ctx context.Context, token string) *Client {
 // PUBLIC METHODS
 
 func (this *Client) ListRepos(ctx context.Context) (interface{}, error) {
-	repos, _, err := this.Repositories.List(ctx, "", &github.RepositoryListOptions{})
+	repos, _, err := this.Repositories.List(ctx, this.owner, &github.RepositoryListOptions{})
 	return repos, err
 }

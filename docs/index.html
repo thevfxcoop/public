@@ -15,7 +15,7 @@
         <div class="p-2 flex-grow-1"></div>
         <div class="display-1">vfx.coop</div>
         <div class="text-uppercase">
-            85 Great Portland Street ● First Floor ● London ● W1W 7LT
+            First Floor // 85 Great Portland Street // London // W1W 7LT
         </div>
         <div class="p-2 flex-grow-1"><button type="button" class="btn btn-dark" data-bs-toggle="modal"
                 data-bs-target="#contactus">Contact Us</button></div>
@@ -24,7 +24,8 @@
     <div class="modal fade" id="contactus" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content  bg-dark">
-                <form class="needs-validation" method="POST" novalidate>
+                <form id="contactus" class="needs-validation" method="POST"
+                    action="https://hd5ypo8gh5.execute-api.eu-west-2.amazonaws.com/test/contactus" novalidate>
                     <div class="modal-header">
                         <h5 class="modal-title">Contact Us</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -33,14 +34,15 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="textarea" class="form-label">Tell us a story</label>
-                            <textarea class="form-control" id="textarea" rows="3" required></textarea>
+                            <textarea class="form-control" name="text" rows="3" required></textarea>
                             <div class="invalid-feedback">
                                 We need a story
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">How can we communicate</label>
-                            <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                            <input type="email" class="form-control" name="email" placeholder="name@example.com"
+                                required>
                             <div class="invalid-feedback">
                                 We'd like to communicate
                             </div>
@@ -49,21 +51,40 @@
                     </div>
                     <div class="modal-footer">
                         <div class="g-recaptcha" data-sitekey="6LfhCZAaAAAAAOeNjSPPd-Qxl6_4F7wFWbqL807X"></div>
-                        <button type="submit" class="btn btn-secondary">I am not a robot</button>
+                        <button type="submit" class="btn btn-secondary">I'm not a robot</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <script type="text/javascript">
-        var form = document.querySelector('.needs-validation')
-        form.addEventListener('submit',(event) => {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
+        var form = document.querySelector(".needs-validation");
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (form.checkValidity()) {
+                var data = {};
+                new FormData(form).forEach(function(value, key){
+                    data[key] = value;
+                });
+                fetch(form.action, {
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    method: "POST",
+                    mode: "no-cors",
+                    body: JSON.stringify(data),
+                }).then(function (response) {
+                    console.log("Request",data);
+                    console.log("Response",response);
+                }).catch(function (error) {
+                    console.warn(error)
+                })
+                form.classList.add('was-validated');
             }
-            form.classList.add('was-validated');
         }, false);
     </script>
 </body>
+
 </html>

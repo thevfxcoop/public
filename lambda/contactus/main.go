@@ -43,7 +43,7 @@ func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest
 	}
 
 	// Get github client
-	client := github.NewClient(ctx, request.StageVariables["GITHUB_TOKEN"])
+	client := github.NewClient(ctx, request.StageVariables["GITHUB_TOKEN"], request.StageVariables["GITHUB_OWNER"])
 	if client == nil {
 		return events.APIGatewayProxyResponse{Body: http.StatusText(http.StatusInternalServerError), StatusCode: http.StatusInternalServerError}, nil
 	}
