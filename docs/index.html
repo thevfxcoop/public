@@ -21,9 +21,21 @@
                 data-bs-target="#contactus">Contact Us</button></div>
     </div>
 
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+        <div class="toast text-white bg-danger border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us -->
     <div class="modal fade" id="contactus" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content  bg-dark">
+            <div class="modal-content bg-dark">
                 <form id="contactus" class="needs-validation" method="POST"
                     action="https://hd5ypo8gh5.execute-api.eu-west-2.amazonaws.com/test/contactus" novalidate>
                     <div class="modal-header">
@@ -57,14 +69,18 @@
             </div>
         </div>
     </div>
+
+    <!-- Script -->
     <script type="text/javascript">
         var form = document.querySelector(".needs-validation");
+        var toast = new bootstrap.Toast(document.querySelector(".toast"));
+        var modal = new bootstrap.Toast(document.querySelector(".modal"));
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             event.stopPropagation();
             if (form.checkValidity()) {
                 var data = {};
-                new FormData(form).forEach(function(value, key){
+                new FormData(form).forEach(function (value, key) {
                     data[key] = value;
                 });
                 fetch(form.action, {
@@ -73,16 +89,20 @@
                         "Content-Type": "application/json",
                     },
                     method: "POST",
-                    mode: "no-cors",
                     body: JSON.stringify(data),
                 }).then(function (response) {
-                    console.log("Request",data);
-                    console.log("Response",response);
+                    document.querySelector(".toast-body").innerText = response.statusText;
+                    modal.hide();
+                    toast.show();
+                    form.text.value = "";
+                    form.email.value = "";
                 }).catch(function (error) {
-                    console.warn(error)
+                    document.querySelector(".toast-body").innerText = error;
+                    modal.hide();
+                    toast.show();
                 })
-                form.classList.add('was-validated');
             }
+            form.classList.add('was-validated');
         }, false);
     </script>
 </body>
