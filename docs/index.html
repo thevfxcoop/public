@@ -54,7 +54,7 @@
                     <div class="modal-footer">
                         <div class="g-recaptcha" data-sitekey="6LfhCZAaAAAAAOeNjSPPd-Qxl6_4F7wFWbqL807X"
                             data-callback="enableSubmit"></div>
-                        <button type="submit" id="submit" class="btn btn-secondary">I'm not a robot</button>
+                        <button type="submit" id="submit" class="btn btn-secondary disabled">I'm not a robot</button>
                     </div>
                 </form>
             </div>
@@ -106,6 +106,7 @@
             form.classList.add('was-validated');
         }, false);
         function enableSubmit() {
+            document.querySelector("#submit").innerText = "You're not a robot";
             document.querySelector("#submit").classList.remove("disabled");
         }
     </script>
