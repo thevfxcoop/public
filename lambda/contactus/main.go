@@ -57,6 +57,11 @@ func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest
 		return SendResponse(http.StatusBadRequest, err.Error())
 	}
 
+	// Check request
+	if body.isValid() == false {
+		return SendResponse(http.StatusBadRequest, nil)
+	}
+
 	// Get github client
 	client := github.NewClient(ctx, request.StageVariables["GITHUB_TOKEN"], request.StageVariables["GITHUB_OWNER"])
 	if client == nil {
@@ -64,13 +69,13 @@ func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest
 	}
 
 	// Create an issue
-	issue, err := client.CreateIssue(ctx, body.Repository, body.Email, body.Text+"\n")
+	_, err := client.CreateIssue(ctx, body.Repository, body.Email, body.Text+"\n")
 	if err != nil {
 		return SendResponse(http.StatusBadGateway, err.Error())
 	}
 
 	// Return response
-	return SendResponse(http.StatusOK, issue)
+	return SendResponse(http.StatusOK, "Thanks for contacting us")
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,12 +93,25 @@ func SendResponse(code int, value interface{}) (events.APIGatewayProxyResponse, 
 	}
 	json, err := json.Marshal(response)
 	return events.APIGatewayProxyResponse{
-		Headers: map[string]string{
-			"Access-Control-Allow-Origin": "*",
-		},
 		Body:       string(json) + "\n",
 		StatusCode: code,
 	}, err
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// UTILS
+
+func (r Request) isValid() bool {
+	if r.Email == "" {
+		return false
+	}
+	if r.Text == "" {
+		return false
+	}
+	if r.Repository == "" {
+		return false
+	}
+	return true
 }
 
 ///////////////////////////////////////////////////////////////////////////////
