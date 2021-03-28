@@ -43,3 +43,11 @@ func (this *Client) ListRepos(ctx context.Context) (interface{}, error) {
 	repos, _, err := this.Repositories.List(ctx, this.owner, &github.RepositoryListOptions{})
 	return repos, err
 }
+
+func (this *Client) CreateIssue(ctx context.Context, repo, title, body string) (interface{}, error) {
+	issue, _, err := this.Issues.Create(ctx, this.owner, repo, &github.IssueRequest{
+		Title: &title,
+		Body:  &body,
+	})
+	return issue, err
+}

@@ -33,11 +33,12 @@
     </div>
 
     <!-- Contact Us -->
-    <div class="modal fade" id="contactus" tabindex="-1" aria-hidden="true">
+    <div class="modal" id="contactus" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content bg-dark">
                 <form id="contactus" class="needs-validation" method="POST"
                     action="https://hd5ypo8gh5.execute-api.eu-west-2.amazonaws.com/test/contactus" novalidate>
+                    <input type="hidden" name="repository" value="core">
                     <div class="modal-header">
                         <h5 class="modal-title">Contact Us</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"

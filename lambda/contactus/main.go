@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -14,52 +15,85 @@ import (
 // TYPES
 
 type Request struct {
-	Text  string `json:"text"`
-	Email string `json:"email"`
+	Repository string `json:"repository"`
+	Text       string `json:"text"`
+	Email      string `json:"email"`
 }
 
 type Response struct {
-	Status string `json:"status"`
+	Status  string      `json:"status"`
+	Content interface{} `json:"content,omitempty"`
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // HANDLER
 
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// COORS
+	if request.HTTPMethod == http.MethodOptions {
+		return events.APIGatewayProxyResponse{
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":  "https://www.vfx.coop",
+				"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+				"Access-Control-Allow-Headers": "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization",
+			},
+			StatusCode: http.StatusOK,
+		}, nil
+	}
+
 	// Route handler
 	if request.Path == "/contactus" && request.HTTPMethod == http.MethodPost {
 		return HandlerContactUs(ctx, request)
 	}
 
 	// By default, return NotFound
-	return events.APIGatewayProxyResponse{Body: http.StatusText(http.StatusNotFound), StatusCode: http.StatusNotFound}, nil
+	return SendResponse(http.StatusNotFound, nil)
 }
 
 func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// Request will be used to take the json response from client and build it
 	var body Request
 	if err := json.Unmarshal([]byte(request.Body), &body); err != nil {
-		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusBadRequest}, nil
+		return SendResponse(http.StatusBadRequest, err.Error())
 	}
 
 	// Get github client
 	client := github.NewClient(ctx, request.StageVariables["GITHUB_TOKEN"], request.StageVariables["GITHUB_OWNER"])
 	if client == nil {
-		return events.APIGatewayProxyResponse{Body: http.StatusText(http.StatusInternalServerError), StatusCode: http.StatusInternalServerError}, nil
+		return SendResponse(http.StatusInternalServerError, nil)
 	}
 
-	// List Repos
-	repos, err := client.ListRepos(ctx)
+	// Create an issue
+	issue, err := client.CreateIssue(ctx, body.Repository, body.Email, body.Text+"\n")
 	if err != nil {
-		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusBadGateway}, nil
+		return SendResponse(http.StatusBadGateway, err.Error())
 	}
 
 	// Return response
-	if response, err := json.Marshal(repos); err != nil {
-		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, nil
+	return SendResponse(http.StatusOK, issue)
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// RESPONDER
+
+func SendResponse(code int, value interface{}) (events.APIGatewayProxyResponse, error) {
+	response := new(Response)
+	if value == nil {
+		response.Status = http.StatusText(code)
+	} else if code == http.StatusOK {
+		response.Status = http.StatusText(code)
+		response.Content = value
 	} else {
-		return events.APIGatewayProxyResponse{Body: string(response), StatusCode: http.StatusOK}, nil
+		response.Status = fmt.Sprint(value)
 	}
+	json, err := json.Marshal(response)
+	return events.APIGatewayProxyResponse{
+		Headers: map[string]string{
+			"Access-Control-Allow-Origin": "*",
+		},
+		Body:       string(json) + "\n",
+		StatusCode: code,
+	}, err
 }
 
 ///////////////////////////////////////////////////////////////////////////////
