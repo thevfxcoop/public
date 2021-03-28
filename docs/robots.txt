@@ -1,0 +1,9 @@
+
+User-agent: *
+Allow: /
+Disallow: /css/
+Disallow: /favicon/
+Disallow: /font/
+Disallow: /js/
+
+Sitemap: https://www.vfx.coop/sitemap.xml

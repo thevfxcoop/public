@@ -21,22 +21,11 @@
                 data-bs-target="#contactus">Contact Us</button></div>
     </div>
 
-    <!-- Toast -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-        <div class="toast text-white bg-danger border-0" role="alert">
-            <div class="d-flex">
-                <div class="toast-body"></div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
-
     <!-- Contact Us -->
-    <div class="modal" id="contactus" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="contactus" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog border-light">
             <div class="modal-content bg-dark">
-                <form id="contactus" class="needs-validation" method="POST"
+                <form class="form needs-validation" method="POST"
                     action="https://hd5ypo8gh5.execute-api.eu-west-2.amazonaws.com/test/contactus" novalidate>
                     <input type="hidden" name="repository" value="core">
                     <div class="modal-header">
@@ -63,19 +52,30 @@
 
                     </div>
                     <div class="modal-footer">
-                        <div class="g-recaptcha" data-sitekey="6LfhCZAaAAAAAOeNjSPPd-Qxl6_4F7wFWbqL807X"></div>
-                        <button type="submit" class="btn btn-secondary">I'm not a robot</button>
+                        <div class="g-recaptcha" data-sitekey="6LfhCZAaAAAAAOeNjSPPd-Qxl6_4F7wFWbqL807X"
+                            data-callback="enableSubmit"></div>
+                        <button type="submit" id="submit" class="btn btn-secondary">I'm not a robot</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- Toast -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+        <div class="toast align-items-center text-white bg-dark border-light" role="alert">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+              </div>            
+        </div>
+    </div>
+
     <!-- Script -->
     <script type="text/javascript">
         var form = document.querySelector(".needs-validation");
+        var modal = new bootstrap.Modal(document.querySelector(".modal"));
         var toast = new bootstrap.Toast(document.querySelector(".toast"));
-        var modal = new bootstrap.Toast(document.querySelector(".modal"));
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -92,19 +92,22 @@
                     method: "POST",
                     body: JSON.stringify(data),
                 }).then(function (response) {
-                    document.querySelector(".toast-body").innerText = response.statusText;
+                    document.querySelector(".toast-body").innerText = "" + response;
                     modal.hide();
                     toast.show();
-                    form.text.value = "";
-                    form.email.value = "";
+                    form.reset();
                 }).catch(function (error) {
-                    document.querySelector(".toast-body").innerText = error;
+                    document.querySelector(".toast-body").innerText = "Error: " + error;
                     modal.hide();
                     toast.show();
+                    form.reset();
                 })
             }
             form.classList.add('was-validated');
         }, false);
+        function enableSubmit() {
+            document.querySelector("#submit").classList.remove("disabled");
+        }
     </script>
 </body>
 
