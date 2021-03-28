@@ -21,7 +21,7 @@ type Request struct {
 }
 
 type Response struct {
-	Status  string      `json:"status"`
+	Status  int         `json:"status"`
 	Content interface{} `json:"content,omitempty"`
 }
 
@@ -76,7 +76,7 @@ func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest
 	}
 
 	// Create an issue
-	_, err := client.CreateIssue(ctx, body.Repository, body.Email, body.Text+"\n")
+	_, err := client.CreateIssue(ctx, body.Repository, body.Email, body.Text+"\n", []string{"contactus"})
 	if err != nil {
 		return SendResponse(http.StatusBadGateway, err.Error())
 	}
@@ -90,13 +90,11 @@ func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest
 
 func SendResponse(code int, value interface{}) (events.APIGatewayProxyResponse, error) {
 	response := new(Response)
-	if value == nil {
-		response.Status = http.StatusText(code)
-	} else if code == http.StatusOK {
-		response.Status = http.StatusText(code)
+	response.Status = code
+	if code == http.StatusOK {
 		response.Content = value
 	} else {
-		response.Status = fmt.Sprint(value)
+		response.Content = fmt.Sprint(value)
 	}
 	json, err := json.Marshal(response)
 	return events.APIGatewayProxyResponse{

@@ -39,15 +39,11 @@ func NewClient(ctx context.Context, token, owner string) *Client {
 ///////////////////////////////////////////////////////////////////////////////
 // PUBLIC METHODS
 
-func (this *Client) ListRepos(ctx context.Context) (interface{}, error) {
-	repos, _, err := this.Repositories.List(ctx, this.owner, &github.RepositoryListOptions{})
-	return repos, err
-}
-
-func (this *Client) CreateIssue(ctx context.Context, repo, title, body string) (interface{}, error) {
+func (this *Client) CreateIssue(ctx context.Context, repo, title, body string, labels []string) (interface{}, error) {
 	issue, _, err := this.Issues.Create(ctx, this.owner, repo, &github.IssueRequest{
-		Title: &title,
-		Body:  &body,
+		Title:  &title,
+		Body:   &body,
+		Labels: &labels,
 	})
 	return issue, err
 }
