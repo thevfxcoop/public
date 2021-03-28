@@ -76,13 +76,13 @@ func HandlerContactUs(ctx context.Context, request events.APIGatewayProxyRequest
 	}
 
 	// Create an issue
-	_, err := client.CreateIssue(ctx, body.Repository, body.Email, body.Text+"\n", []string{"contactus"})
+	_, err := client.CreateIssue(ctx, body.Repository, "Message from "+body.Email, body.Text+"\n", []string{"contactus"})
 	if err != nil {
 		return SendResponse(http.StatusBadGateway, err.Error())
 	}
 
 	// Return response
-	return SendResponse(http.StatusOK, "Thanks for contacting us")
+	return SendResponse(http.StatusOK, "Thanks for contacting us, we'll be in touch shortly")
 }
 
 ///////////////////////////////////////////////////////////////////////////////
