@@ -8,6 +8,7 @@
     <link href="css/style.css" rel="stylesheet">
     <script src="js/bootstrap-5.0.0-beta2-dist/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+    <script src="js/canvas.js"></script>
 </head>
 
 <body class="bg-dark text-light">
@@ -67,7 +68,7 @@
             <div class="d-flex">
                 <div class="toast-body"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-              </div>            
+            </div>
         </div>
     </div>
 
@@ -92,22 +93,22 @@
                     method: "POST",
                     body: JSON.stringify(data),
                 })
-                .then(response => response.json())
-                .then(response => {
-                    if(response.status == 200) {
-                        document.querySelector(".toast-body").innerText = "" + response["content"];
-                    } else {
-                        document.querySelector(".toast-body").innerText = "Error: " + response["content"];
-                    }
-                    modal.hide();
-                    toast.show();
-                    form.reset();
-                }).catch(function (error) {
-                    document.querySelector(".toast-body").innerText = "Error: " + error;
-                    modal.hide();
-                    toast.show();
-                    form.reset();
-                })
+                    .then(response => response.json())
+                    .then(response => {
+                        if (response.status == 200) {
+                            document.querySelector(".toast-body").innerText = "" + response["content"];
+                        } else {
+                            document.querySelector(".toast-body").innerText = "Error: " + response["content"];
+                        }
+                        modal.hide();
+                        toast.show();
+                        form.reset();
+                    }).catch(function (error) {
+                        document.querySelector(".toast-body").innerText = "Error: " + error;
+                        modal.hide();
+                        toast.show();
+                        form.reset();
+                    })
             }
             form.classList.add('was-validated');
         }, false);
@@ -116,6 +117,8 @@
             document.querySelector("#submit").classList.remove("disabled");
         }
     </script>
-</body>
 
+    <!-- Canvas -->
+    <canvas id="canvas"></canvas>
+</body>
 </html>

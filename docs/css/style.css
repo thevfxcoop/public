@@ -4,4 +4,16 @@
 body {
     font-family: Lato, sans-serif;
     font-weight: 300;
+    margin:0; 
+    padding:0;
+}
+
+canvas { 
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
 }
